@@ -1,3 +1,8 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Random;
+
 /**
  * @author Mary Pwint
  * CMPS-2200 Project1 Part2
@@ -131,6 +136,57 @@ public class Sorter {
             arr[largest] = swap;
             // Recursively heapify the affected sub-tree
             maxHeapify(arr, n, largest);
+        }
+    }
+
+    /**
+     * Driver method for testing the performance of sorting algorithms
+     */
+    public static void main(String[] args) throws IOException {
+        for (int iter=1; iter <= 5; iter++) {
+            System.out.println("Iteration: " + iter);
+            String filename = "SortRuntime/SortRuntime" + iter + ".csv";
+            PrintWriter output = new PrintWriter(new FileWriter(filename));
+            output.println("Input size,Runtime(ns)");
+            Sorter sorter = new Sorter();
+            System.out.println("Mergesort");
+            for (int i = 1; i <= 100000; i = i*10) {
+                int[] array = new int[i];
+                for (int j = i / 10; j < i; j++) {
+                    array[j] = new Random().nextInt();
+                }
+                final long startMergesort = System.nanoTime();
+                sorter.mergesort(array);
+                final long timeMergesort = System.nanoTime() - startMergesort;
+                System.out.println("Performance of 'mergesort' method for array of size " + i + " = " + (timeMergesort) + " ns");
+                output.println(i + "," + timeMergesort);
+            }
+            System.out.println("Quicksort");
+            for (int i = 1; i <= 100000; i = i*10) {
+                int[] array = new int[i];
+                for (int j = i / 10; j < i; j++) {
+                    array[j] = new Random().nextInt();
+                }
+                final long startQuicksort = System.nanoTime();
+                sorter.quicksort(array);
+                final long timeQuicksort = System.nanoTime() - startQuicksort;
+                System.out.println("Performance of 'quicksort' method for array of size " + i + " = " + (timeQuicksort) + " ns");
+                output.println(i + "," + timeQuicksort);
+            }
+            System.out.println("Heapsort");
+            for (int i = 1; i <= 100000; i = i*10) {
+                int[] array = new int[i];
+                for (int j = i / 10; j < i; j++) {
+                    array[j] = new Random().nextInt();
+                }
+                final long startHeapsort = System.nanoTime();
+                sorter.heapsort(array);
+                final long timeHeapsort = System.nanoTime() - startHeapsort;
+                System.out.println("Performance of 'heapsort' method for array of size " + i + " = " + (timeHeapsort) + " ns");
+                output.println(i + "," + timeHeapsort);
+            }
+            output.close();
+            System.out.println();
         }
     }
 }

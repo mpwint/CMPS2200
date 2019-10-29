@@ -1,8 +1,14 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Random;
+
 /**
  * @author Mary Pwint
  * CMPS-2200 Project1 Part1
  * class BinarySearchTree is a basic implementation of a binary search tree
  */
+
 public class BinarySearchTree<E extends Comparable<? super E>> {
     private Node root;
     private int size;
@@ -28,7 +34,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     /**
-     * Remove the element from this AVLTree.
+     * Remove the element from this BST.
      * @param element the element to remove
      */
     public void remove(E element) {
@@ -151,7 +157,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     }
 
     private class Node {
-        // since this is a private inner class, and the outer AVLTree class
+        // since this is a private inner class, and the outer BinarySearchTree class
         // will need to freely modify the connections and update the height
         // of its nodes, the following three variables are not private.
         Node left;
@@ -160,7 +166,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         E element;
 
         /**
-         * Construct an AVLTreeNode. At instantiation, each node has no
+         * Construct an BSTNode. At instantiation, each node has no
          * children and therefore a height of 0.
          * @param element the element that this node contains
          */
@@ -169,6 +175,32 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             this.right = null;
             this.height = 0;
             this.element = element;
+        }
+    }
+
+    /**
+     * Driver method for testing the performance of this BST Tree
+     */
+    public static void main(String[] args) throws IOException {
+        for (int iter=1; iter <= 5; iter++) {
+            System.out.println("Iteration: " + iter);
+            BinarySearchTree<Integer> newTree = new BinarySearchTree<>();
+            String filename = "BSTRuntime/BSTRuntime" + iter + ".csv";
+            PrintWriter output = new PrintWriter(new FileWriter(filename));
+            output.println("Input size,Runtime(ns)");
+            for (int i = 1; i <= 1000000; i = i * 10) {
+                for (int j = i / 10; j < i; j++) {
+                    newTree.insert(new Random().nextInt(i * 10));
+                }
+                final long startTime = System.nanoTime();
+                newTree.contains(new Random().nextInt(i * 10));
+                final long endTime = System.nanoTime();
+                final long elaspedTime = endTime - startTime;
+                System.out.println("Performance of 'contains' method for the BST of size " + i + " = " + (elaspedTime) + " ns");
+                output.println(i + "," + elaspedTime);
+            }
+            output.close();
+            System.out.println();
         }
     }
 }
